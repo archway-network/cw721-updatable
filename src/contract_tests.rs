@@ -11,6 +11,8 @@ use crate::{
     ContractError, Cw721Contract, ExecuteMsg, Extension, InstantiateMsg, MintMsg, QueryMsg,
 };
 
+use crate::msg::{UpdateMsg};
+
 const MINTER: &str = "merlin";
 const CONTRACT_NAME: &str = "Magic Power";
 const SYMBOL: &str = "MGK";
@@ -192,6 +194,80 @@ fn burning() {
     // list the token_ids
     let tokens = contract.all_tokens(deps.as_ref(), None, None).unwrap();
     assert!(tokens.tokens.is_empty());
+}
+
+//here
+#[test]
+fn updating_nft() {
+    struct Metadata {
+        name: Option<String>,
+        image: Option<String>,
+        description: Option<String>,
+    }
+
+    let mut deps = mock_dependencies();
+    let contract = setup_contract(deps.as_mut());
+
+    // Mint a token
+    let token_id = "upgradeable".to_string();
+
+    let metadata_extension = Metadata {
+        name: String::from("original name"),
+        description: String::from("original description"),
+        image: String::from("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn"),
+    };
+
+    let extension_first = Some(metadata_extension);
+
+    let modified_metadata_extension = Metadata {
+        name: String::from("modified name"),
+        description: String::from("modified description"),
+        image: String::from("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn"),
+    };
+
+    let extension_second = Some(modified_metadata_extension);
+
+    let mint_msg = ExecuteMsg::Mint(MintMsg::<Extension> {
+        token_id: token_id.clone(),
+        owner: MINTER.to_string(),
+        token_uri: None,
+        extension: extension_first,
+    });
+
+    let update_msg = ExecuteMsg::Update(UpdateMsg::<Extension> {
+        token_id: token_id.clone(),
+        extension: extension_second,
+    });
+
+    // Mint NFT
+    let allowed = mock_info(MINTER, &[]);
+    let _ = contract
+        .execute(deps.as_mut(), mock_env(), allowed.clone(), mint_msg)
+        .unwrap();
+
+    // Original NFT info is correct
+    let info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
+    assert_eq!(
+        info,
+        NftInfoResponse::<Extension> {
+            token_uri: None,
+            extension: extension_first,
+        }
+    );
+
+    // Update NFT
+    let _update = contract
+        .execute(deps.as_mut(), mock_env(), allowed.clone(), update_msg)
+        .unwrap();
+
+    // Modified NFT info is correct
+    assert_eq!(
+        info,
+        NftInfoResponse::<Extension> {
+            token_uri: None,
+            extension: extension_second,
+        }
+    );
 }
 
 #[test]
