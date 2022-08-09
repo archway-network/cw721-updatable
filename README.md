@@ -1,4 +1,4 @@
-# Cw721 Basic
+# Cw721 Upgradeable
 
 This is a basic implementation of a cw721 NFT contract. It implements
 the [CW721 spec](../../packages/cw721/README.md) and is designed to
@@ -10,6 +10,7 @@ Implements:
 - [x] CW721 Base
 - [x] Metadata extension
 - [x] Enumerable extension
+- [x] Updateable metadata (XXX TODO: Fix permissions scheme)
 
 ## Implementation
 
@@ -29,6 +30,8 @@ the minting behavior but not other functionality, you could extend this contract
 or just create a custom contract as the owner and use that contract to Mint.
 
 If provided, it is expected that the _token_uri_ points to a JSON file following the [ERC721 Metadata JSON Schema](https://eips.ethereum.org/EIPS/eip-721).
+
+* `UpdateMsg` is a message type for upgrading NFT metadata. At the moment it follows a permissions scheme where it can only be called by an individual who is both `minter` (e.g. see: `QueryMsg::Minter{}`) and token owner (e.g. see `QueryMsg::AllNftInfo`)
 
 ## Running this contract
 
