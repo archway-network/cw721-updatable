@@ -19,8 +19,9 @@ Beyond that, we make a few additions:
 
 * `InstantiateMsg` takes name and symbol (for metadata), as well as a **Minter** address. This is a special address that has full 
 power to mint new NFTs (but not modify existing ones)
-* `ExecuteMsg::Mint{token_id, owner, token_uri}` - creates a new token with given owner and (optional) metadata. It can only be called by
+* `ExecuteMsg::Mint{token_id, owner, token_uri, extension}` - creates a new token with given owner and (optional) metadata. It can only be called by
 the Minter set in `instantiate`.
+* `ExecuteMsg::Update{token_id, extension}` - updates a token's metadata provided permissions criteria are satisfied.
 * `QueryMsg::Minter{}` - returns the minter address for this contract.
 
 It requires all tokens to have defined metadata in the standard format (with no extensions). For generic NFTs this may often be enough.
