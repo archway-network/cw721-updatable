@@ -24,7 +24,11 @@ pub struct InstantiateMsg {
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg<T, E> {
     /// Transfer is a base message to move a token to another account without triggering actions
-    TransferNft { recipient: String, token_id: String },
+    TransferNft { 
+        recipient: String, 
+        token_id: String 
+    },
+    
     /// Send is a base message to transfer a token to a contract and trigger an action
     /// on the receiving contract.
     SendNft {
@@ -32,6 +36,7 @@ pub enum ExecuteMsg<T, E> {
         token_id: String,
         msg: Binary,
     },
+    
     /// Allows operator to transfer / send the token from the owner's account.
     /// If expiration is set, then this allowance has a time/height limit
     Approve {
@@ -39,8 +44,13 @@ pub enum ExecuteMsg<T, E> {
         token_id: String,
         expires: Option<Expiration>,
     },
+    
     /// Remove previously granted Approval
-    Revoke { spender: String, token_id: String },
+    Revoke { 
+        spender: String, 
+        token_id: String 
+    },
+    
     /// Allows operator to transfer / send any token from the owner's account.
     /// If expiration is set, then this allowance has a time/height limit
     ApproveAll {
@@ -58,6 +68,10 @@ pub enum ExecuteMsg<T, E> {
 
     /// Extension msg
     Extension { msg: E },
+
+    /// Upgrade NFT metadata 
+    /// XXX TODO: Require correct approvals
+    Update(UpdateMsg<T>),
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -70,6 +84,14 @@ pub struct MintMsg<T> {
     /// Should point to a JSON file that conforms to the ERC721
     /// Metadata JSON Schema
     pub token_uri: Option<String>,
+    /// Any custom extension used by this contract
+    pub extension: T,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct UpdateMsg<T> {
+    /// Unique ID of the NFT
+    pub token_id: String,
     /// Any custom extension used by this contract
     pub extension: T,
 }

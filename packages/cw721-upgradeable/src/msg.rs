@@ -35,4 +35,9 @@ pub enum Cw721ExecuteMsg {
     RevokeAll { operator: String },
     /// Burn an NFT the sender has access to
     Burn { token_id: String },
+
+    //here
+    // Upgrade NFT metadata 
+    // XXX TODO: Require correct approvals
+    // Update { token_id: String, metadata: Option<T> }
 }

@@ -7,7 +7,7 @@ use cw2::set_contract_version;
 use cw721_upgradeable::{ContractInfoResponse, CustomMsg, Cw721Execute, Cw721ReceiveMsg, Expiration};
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpdateMsg};
 use crate::state::{Approval, Cw721Contract, TokenInfo};
 
 // Version info for migration
@@ -72,6 +72,13 @@ where
             } => self.send_nft(deps, env, info, contract, token_id, msg),
             ExecuteMsg::Burn { token_id } => self.burn(deps, env, info, token_id),
             ExecuteMsg::Extension { msg: _ } => Ok(Response::default()),
+
+            //here
+            //ExecuteMsg::Update { token_id, metadata } => execute_update(deps, env, info, token_id, metadata ),
+            // ExecuteMsg::Update { token_id, metadata } => {
+            //     self.update(deps, env, info, token_id, metadata)
+            // },
+            ExecuteMsg::Update(msg) => self.update(deps, env, info, msg),
         }
     }
 }
@@ -117,6 +124,41 @@ where
             .add_attribute("minter", info.sender)
             .add_attribute("owner", msg.owner)
             .add_attribute("token_id", msg.token_id))
+    }
+
+    //here
+    // XXX TODO: Update and correct permissions scheme
+    // Should require approval from minter and be called
+    // only by token owner or approved party
+    fn update(
+        &self,
+        deps: DepsMut,
+        _env: Env,
+        info: MessageInfo,
+        msg: UpdateMsg<T>,
+    ) -> Result<Response<C>, ContractError> {
+        let token_id = msg.token_id;
+        let metadata = msg.extension;
+
+        // XXX: Ensure minter (Temp. replacement for contract admin)
+        let minter = self.minter.load(deps.storage)?;
+        if info.sender != minter {
+            return Err(ContractError::Unauthorized {});
+        }
+
+        // Ensure owner is calling party
+        let mut token = self.tokens.load(deps.storage, &token_id)?;
+        if info.sender != token.owner {
+            return Err(ContractError::Unauthorized {});
+        }
+
+        token.extension = metadata;
+        self.tokens.save(deps.storage, &token_id, &token)?;
+    
+        Ok(Response::new()
+            .add_attribute("action", "update")
+            .add_attribute("sender", info.sender)
+            .add_attribute("token_id", token_id))
     }
 }
 
