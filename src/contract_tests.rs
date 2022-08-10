@@ -279,9 +279,11 @@ fn updating_nft() {
         .execute(deps.as_mut(), mock_env(), allowed.clone(), update_msg)
         .unwrap();
 
+    let update_info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
+
     // Modified NFT info is correct
     assert_eq!(
-        info,
+        update_info,
         NftInfoResponse::<MetadataExtension> {
             token_uri: None,
             extension: modified_metadata_extension,
