@@ -71,7 +71,3 @@ messages you want to support. The same with `QueryMsg`. You will most
 likely want to write a custom, domain-specific `instantiate`.
 
 **TODO: add example when written**
-
-For now, you can look at [`cw721-staking`](../cw721-staking/README.md)
-for an example of how to "inherit" cw721 functionality and combine it with custom logic.
-The process is similar for cw721.
