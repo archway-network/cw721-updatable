@@ -211,32 +211,28 @@ fn updating_nft() {
     // Mint a token
     let token_id = "upgradeable".to_string();
 
-    let metadata_extension = Metadata {
-        name: String::from("original name"),
-        description: String::from("original description"),
-        image: String::from("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn"),
-    };
+    let metadata_extension = Some(Metadata {
+        name: Some("original name".into()),
+        description: Some("original description".into()),
+        image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
+    });
 
-    let extension_first = Some(metadata_extension);
-
-    let modified_metadata_extension = Metadata {
-        name: String::from("modified name"),
-        description: String::from("modified description"),
-        image: String::from("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn"),
-    };
-
-    let extension_second = Some(modified_metadata_extension);
+    let modified_metadata_extension = Some(Metadata {
+        name: Some("modified name".into()),
+        description: Some("modified description".into()),
+        image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
+    });
 
     let mint_msg = ExecuteMsg::Mint(MintMsg::<Extension> {
         token_id: token_id.clone(),
         owner: MINTER.to_string(),
         token_uri: None,
-        extension: extension_first,
+        extension: metadata_extension,
     });
 
     let update_msg = ExecuteMsg::Update(UpdateMsg::<Extension> {
         token_id: token_id.clone(),
-        extension: extension_second,
+        extension: modified_metadata_extension,
     });
 
     // Mint NFT
@@ -251,7 +247,7 @@ fn updating_nft() {
         info,
         NftInfoResponse::<Extension> {
             token_uri: None,
-            extension: extension_first,
+            extension: metadata_extension,
         }
     );
 
@@ -265,7 +261,7 @@ fn updating_nft() {
         info,
         NftInfoResponse::<Extension> {
             token_uri: None,
-            extension: extension_second,
+            extension: modified_metadata_extension,
         }
     );
 }
