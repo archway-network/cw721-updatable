@@ -13,11 +13,40 @@ use crate::{
 
 use crate::msg::{UpdateMsg};
 
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+// use serde::de::DeserializeOwned;
+
+
 const MINTER: &str = "merlin";
 const CONTRACT_NAME: &str = "Magic Power";
 const SYMBOL: &str = "MGK";
 
+//here
+#[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
+pub struct Metadata {
+    pub name: Option<String>,
+    pub image: Option<String>,
+    pub description: Option<String>,
+}
+
+pub type MetadataExtension = Option<Metadata>;
+
 fn setup_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, Extension, Empty, Empty, Empty> {
+    let contract = Cw721Contract::default();
+    let msg = InstantiateMsg {
+        name: CONTRACT_NAME.to_string(),
+        symbol: SYMBOL.to_string(),
+        minter: String::from(MINTER),
+    };
+    let info = mock_info("creator", &[]);
+    let res = contract.instantiate(deps, mock_env(), info, msg).unwrap();
+    assert_eq!(0, res.messages.len());
+    contract
+}
+
+//pub type Cw721MetadataContract<'a> = cw721_base::Cw721Contract<'a, Extension, Empty>;
+fn setup_extension_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, MetadataExtension, Empty, Empty, Empty> {
     let contract = Cw721Contract::default();
     let msg = InstantiateMsg {
         name: CONTRACT_NAME.to_string(),
@@ -199,14 +228,8 @@ fn burning() {
 //here
 #[test]
 fn updating_nft() {
-    struct Metadata {
-        name: Option<String>,
-        image: Option<String>,
-        description: Option<String>,
-    }
-
     let mut deps = mock_dependencies();
-    let contract = setup_contract(deps.as_mut());
+    let contract = setup_extension_contract(deps.as_mut());
 
     // Mint a token
     let token_id = "upgradeable".to_string();
@@ -223,16 +246,16 @@ fn updating_nft() {
         image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
     });
 
-    let mint_msg = ExecuteMsg::Mint(MintMsg::<Extension> {
+    let mint_msg = ExecuteMsg::Mint(MintMsg::<MetadataExtension> {
         token_id: token_id.clone(),
         owner: MINTER.to_string(),
         token_uri: None,
-        extension: metadata_extension,
+        extension: metadata_extension.clone(),
     });
 
-    let update_msg = ExecuteMsg::Update(UpdateMsg::<Extension> {
+    let update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
         token_id: token_id.clone(),
-        extension: modified_metadata_extension,
+        extension: modified_metadata_extension.clone(),
     });
 
     // Mint NFT
@@ -245,7 +268,7 @@ fn updating_nft() {
     let info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
     assert_eq!(
         info,
-        NftInfoResponse::<Extension> {
+        NftInfoResponse::<MetadataExtension> {
             token_uri: None,
             extension: metadata_extension,
         }
@@ -259,7 +282,7 @@ fn updating_nft() {
     // Modified NFT info is correct
     assert_eq!(
         info,
-        NftInfoResponse::<Extension> {
+        NftInfoResponse::<MetadataExtension> {
             token_uri: None,
             extension: modified_metadata_extension,
         }
