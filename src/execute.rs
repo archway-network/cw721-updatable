@@ -122,7 +122,7 @@ where
             .add_attribute("token_id", msg.token_id))
     }
 
-    // 
+    // Update extensions metadata
     fn update(
         &self,
         deps: DepsMut,
@@ -378,7 +378,7 @@ where
         Ok(token)
     }
 
-    /// returns true iff the sender can execute approve or reject on the contract
+    /// returns true if the sender can execute approve or reject on the contract
     pub fn check_can_approve(
         &self,
         deps: Deps,
