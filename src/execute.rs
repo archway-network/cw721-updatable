@@ -73,11 +73,7 @@ where
             ExecuteMsg::Burn { token_id } => self.burn(deps, env, info, token_id),
             ExecuteMsg::Extension { msg: _ } => Ok(Response::default()),
 
-            //here
-            //ExecuteMsg::Update { token_id, metadata } => execute_update(deps, env, info, token_id, metadata ),
-            // ExecuteMsg::Update { token_id, metadata } => {
-            //     self.update(deps, env, info, token_id, metadata)
-            // },
+            // Update extensions metadata
             ExecuteMsg::Update(msg) => self.update(deps, env, info, msg),
         }
     }
@@ -126,33 +122,34 @@ where
             .add_attribute("token_id", msg.token_id))
     }
 
-    //here
-    // XXX TODO: Update and correct permissions scheme
-    // Should require approval from minter and be called
-    // only by token owner or approved party
+    // 
     fn update(
         &self,
         deps: DepsMut,
-        _env: Env,
+        env: Env,
         info: MessageInfo,
         msg: UpdateMsg<T>,
     ) -> Result<Response<C>, ContractError> {
         let token_id = msg.token_id;
         let metadata = msg.extension;
 
-        // XXX: Ensure minter (Temp. replacement for contract admin)
         let minter = self.minter.load(deps.storage)?;
+        let mut token = self.tokens.load(deps.storage, &token_id)?;
+
+        // Only minter can make changes
         if info.sender != minter {
             return Err(ContractError::Unauthorized {});
         }
 
-        // Ensure owner is calling party
-        let mut token = self.tokens.load(deps.storage, &token_id)?;
-        if info.sender != token.owner {
-            return Err(ContractError::Unauthorized {});
-        }
+        // But minter must be approved by owner
+        self.check_can_send(deps.as_ref(), &env, &info, &token)?;
 
+        // Set extension metadata
         token.extension = metadata;
+
+        // Remove existing approvals
+        token.approvals = vec![];
+
         self.tokens.save(deps.storage, &token_id, &token)?;
     
         Ok(Response::new()
@@ -409,7 +406,7 @@ where
         }
     }
 
-    /// returns true iff the sender can transfer ownership of the token
+    /// returns true if the sender can transfer ownership of the token
     pub fn check_can_send(
         &self,
         deps: Deps,

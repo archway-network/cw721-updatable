@@ -22,7 +22,6 @@ const MINTER: &str = "merlin";
 const CONTRACT_NAME: &str = "Magic Power";
 const SYMBOL: &str = "MGK";
 
-//here
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct Metadata {
     pub name: Option<String>,
@@ -225,13 +224,11 @@ fn burning() {
     assert!(tokens.tokens.is_empty());
 }
 
-//here
 #[test]
 fn updating_nft() {
     let mut deps = mock_dependencies();
     let contract = setup_extension_contract(deps.as_mut());
 
-    // Mint a token
     let token_id = "upgradeable".to_string();
 
     let metadata_extension = Some(Metadata {
@@ -251,6 +248,11 @@ fn updating_nft() {
         owner: MINTER.to_string(),
         token_uri: None,
         extension: metadata_extension.clone(),
+    });
+
+    let err_update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+        token_id: token_id.clone(),
+        extension: modified_metadata_extension.clone(),
     });
 
     let update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
@@ -274,7 +276,15 @@ fn updating_nft() {
         }
     );
 
-    // Update NFT
+    // Random cannot update NFT
+    let random = mock_info("random", &[]);
+    
+    let err = contract
+        .execute(deps.as_mut(), mock_env(), random, err_update_msg)
+        .unwrap_err();
+    assert_eq!(err, ContractError::Unauthorized {});
+
+    // Only allowed minters can update NFT
     let _update = contract
         .execute(deps.as_mut(), mock_env(), allowed.clone(), update_msg)
         .unwrap();
