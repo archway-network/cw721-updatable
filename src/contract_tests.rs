@@ -43,7 +43,6 @@ fn setup_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, Extension, Empty,
     contract
 }
 
-//pub type Cw721MetadataContract<'a> = cw721_base::Cw721Contract<'a, Extension, Empty>;
 fn setup_extension_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, MetadataExtension, Empty, Empty, Empty> {
     let contract = Cw721Contract::default();
     let msg = InstantiateMsg {
