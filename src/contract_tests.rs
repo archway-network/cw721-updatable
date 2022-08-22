@@ -230,6 +230,7 @@ fn updating_nft() {
     let contract = setup_extension_contract(deps.as_mut());
 
     let token_id = "upgradeable".to_string();
+    let token_id2 = "can't be upgraded".to_string();
 
     let metadata_extension = Some(Metadata {
         name: Some("original name".into()),
@@ -250,9 +251,17 @@ fn updating_nft() {
         extension: metadata_extension.clone(),
     });
 
-    let err_update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
-        token_id: token_id.clone(),
-        extension: modified_metadata_extension.clone(),
+    let mint_msg2 = ExecuteMsg::Mint(MintMsg::<MetadataExtension> {
+        token_id: token_id2.clone(),
+        owner: "innocent hodlr".to_string(),
+        token_uri: None,
+        extension: metadata_extension.clone(),
+    });
+
+    let err_metadata_extension = Some(Metadata {
+        name: Some("evil doer".into()),
+        description: Some("has rugged your token".into()),
+        image: Some("rugged".into()),
     });
 
     let update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
@@ -260,19 +269,42 @@ fn updating_nft() {
         extension: modified_metadata_extension.clone(),
     });
 
-    // Mint NFT
-    let allowed = mock_info(MINTER, &[]);
-    let _ = contract
-        .execute(deps.as_mut(), mock_env(), allowed.clone(), mint_msg)
+    let err_update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+        token_id: token_id.clone(),
+        extension: err_metadata_extension.clone(),
+    });
+
+    let err_update_msg2 = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+        token_id: token_id2.clone(),
+        extension: err_metadata_extension.clone(),
+    });
+
+    // Mint
+    let admin = mock_info(MINTER, &[]);
+    let _mint1 = contract
+        .execute(deps.as_mut(), mock_env(), admin.clone(), mint_msg)
         .unwrap();
 
-    // Original NFT info is correct
+    let _mint2 = contract
+        .execute(deps.as_mut(), mock_env(), admin.clone(), mint_msg2)
+        .unwrap();
+
+    // Original NFT infos are correct
     let info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
     assert_eq!(
         info,
         NftInfoResponse::<MetadataExtension> {
             token_uri: None,
-            extension: metadata_extension,
+            extension: metadata_extension.clone(),
+        }
+    );
+
+    let info2 = contract.nft_info(deps.as_ref(), token_id2.clone()).unwrap();
+    assert_eq!(
+        info2,
+        NftInfoResponse::<MetadataExtension> {
+            token_uri: None,
+            extension: metadata_extension.clone(),
         }
     );
 
@@ -284,9 +316,15 @@ fn updating_nft() {
         .unwrap_err();
     assert_eq!(err, ContractError::Unauthorized {});
 
+    // Admin can't rug owners
+    let err2 = contract
+        .execute(deps.as_mut(), mock_env(), admin.clone(), err_update_msg2)
+        .unwrap_err();
+    assert_eq!(err2, ContractError::Unauthorized {});
+
     // Only allowed minters can update NFT
     let _update = contract
-        .execute(deps.as_mut(), mock_env(), allowed.clone(), update_msg)
+        .execute(deps.as_mut(), mock_env(), admin.clone(), update_msg)
         .unwrap();
 
     let update_info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
