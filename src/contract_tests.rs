@@ -15,7 +15,6 @@ use crate::msg::{UpdateMsg};
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-// use serde::de::DeserializeOwned;
 
 
 const MINTER: &str = "merlin";
