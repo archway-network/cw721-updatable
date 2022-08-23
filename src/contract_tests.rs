@@ -8,7 +8,7 @@ use cw721_upgradeable::{
 };
 
 use crate::{
-    ContractError, Cw721Contract, ExecuteMsg, Extension, InstantiateMsg, MintMsg, QueryMsg,
+    ContractError, Cw721Contract, ExecuteMsg, InstantiateMsg, MintMsg, QueryMsg,
 };
 
 use crate::msg::{UpgradeMsg};
@@ -28,22 +28,9 @@ pub struct Metadata {
     pub description: Option<String>,
 }
 
-pub type MetadataExtension = Option<Metadata>;
+pub type Extension = Option<Metadata>;
 
 fn setup_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, Extension, Empty, Empty, Empty> {
-    let contract = Cw721Contract::default();
-    let msg = InstantiateMsg {
-        name: CONTRACT_NAME.to_string(),
-        symbol: SYMBOL.to_string(),
-        minter: String::from(MINTER),
-    };
-    let info = mock_info("creator", &[]);
-    let res = contract.instantiate(deps, mock_env(), info, msg).unwrap();
-    assert_eq!(0, res.messages.len());
-    contract
-}
-
-fn setup_extension_contract(deps: DepsMut<'_>) -> Cw721Contract<'static, MetadataExtension, Empty, Empty, Empty> {
     let contract = Cw721Contract::default();
     let msg = InstantiateMsg {
         name: CONTRACT_NAME.to_string(),
@@ -225,7 +212,7 @@ fn burning() {
 #[test]
 fn upgrading_nft() {
     let mut deps = mock_dependencies();
-    let contract = setup_extension_contract(deps.as_mut());
+    let contract = setup_contract(deps.as_mut());
 
     let token_id1 = "upgradeable".to_string();
     let token_id2 = "won't be upgraded".to_string();
@@ -242,14 +229,14 @@ fn upgrading_nft() {
         image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
     });
 
-    let mint_msg = ExecuteMsg::Mint(MintMsg::<MetadataExtension> {
+    let mint_msg = ExecuteMsg::Mint(MintMsg::<Extension> {
         token_id: token_id1.clone(),
         owner: MINTER.to_string(),
         token_uri: None,
         extension: metadata_extension.clone(),
     });
 
-    let mint_msg2 = ExecuteMsg::Mint(MintMsg::<MetadataExtension> {
+    let mint_msg2 = ExecuteMsg::Mint(MintMsg::<Extension> {
         token_id: token_id2.clone(),
         owner: "innocent hodlr".to_string(),
         token_uri: None,
@@ -262,17 +249,17 @@ fn upgrading_nft() {
         image: Some("rugged".into()),
     });
 
-    let update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
+    let update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
         token_id: token_id1.clone(),
         extension: modified_metadata_extension.clone(),
     });
 
-    let err_update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
+    let err_update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
         token_id: token_id1.clone(),
         extension: err_metadata_extension.clone(),
     });
 
-    let err_update_msg2 = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
+    let err_update_msg2 = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
         token_id: token_id2.clone(),
         extension: err_metadata_extension.clone(),
     });
@@ -291,7 +278,7 @@ fn upgrading_nft() {
     let info = contract.nft_info(deps.as_ref(), token_id1.clone()).unwrap();
     assert_eq!(
         info,
-        NftInfoResponse::<MetadataExtension> {
+        NftInfoResponse::<Extension> {
             token_uri: None,
             extension: metadata_extension.clone(),
         }
@@ -300,7 +287,7 @@ fn upgrading_nft() {
     let info2 = contract.nft_info(deps.as_ref(), token_id2.clone()).unwrap();
     assert_eq!(
         info2,
-        NftInfoResponse::<MetadataExtension> {
+        NftInfoResponse::<Extension> {
             token_uri: None,
             extension: metadata_extension.clone(),
         }
@@ -330,7 +317,7 @@ fn upgrading_nft() {
     // Modified NFT info is correct
     assert_eq!(
         update_info,
-        NftInfoResponse::<MetadataExtension> {
+        NftInfoResponse::<Extension> {
             token_uri: None,
             extension: modified_metadata_extension,
         }
