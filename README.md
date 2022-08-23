@@ -1,4 +1,4 @@
-# Cw721 Upgradeable
+# Cw721 Upgradable
 
 This is a basic implementation of a cw721 NFT contract. It implements
 the [CW721 spec](../../packages/cw721/README.md) and is designed to
