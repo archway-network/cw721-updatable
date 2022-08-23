@@ -275,9 +275,9 @@ fn upgrading_nft() {
         .unwrap();
 
     // Original NFT infos are correct
-    let info = contract.nft_info(deps.as_ref(), token_id1.clone()).unwrap();
+    let info1 = contract.nft_info(deps.as_ref(), token_id1.clone()).unwrap();
     assert_eq!(
-        info,
+        info1,
         NftInfoResponse::<Extension> {
             token_uri: None,
             extension: metadata_extension.clone(),
