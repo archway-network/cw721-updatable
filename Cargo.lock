@@ -190,14 +190,14 @@ dependencies = [
  "cw-storage-plus",
  "cw-utils",
  "cw2",
- "cw721-upgradeable",
+ "cw721-upgradable",
  "schemars",
  "serde",
  "thiserror",
 ]
 
 [[package]]
-name = "cw721-upgradeable"
+name = "cw721-upgradable"
 version = "0.13.4"
 dependencies = [
  "cosmwasm-std",

@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use cosmwasm_std::{to_binary, Addr, Binary, BlockInfo, Deps, Env, Order, StdError, StdResult};
 
-use cw721_upgradeable::{
+use cw721_upgradable::{
     AllNftInfoResponse, ApprovalResponse, ApprovalsResponse, ContractInfoResponse, CustomMsg,
     Cw721Query, Expiration, NftInfoResponse, NumTokensResponse, OperatorsResponse, OwnerOfResponse,
     TokensResponse,
@@ -95,7 +95,7 @@ where
 
         // token owner has absolute approval
         if token.owner == spender {
-            let approval = cw721_upgradeable::Approval {
+            let approval = cw721_upgradable::Approval {
                 spender: token.owner.to_string(),
                 expires: Expiration::Never {},
             };
@@ -107,7 +107,7 @@ where
             .into_iter()
             .filter(|t| t.spender == spender)
             .filter(|t| include_expired || !t.is_expired(&env.block))
-            .map(|a| cw721_upgradeable::Approval {
+            .map(|a| cw721_upgradable::Approval {
                 spender: a.spender.into_string(),
                 expires: a.expires,
             })
@@ -135,7 +135,7 @@ where
             .approvals
             .into_iter()
             .filter(|t| include_expired || !t.is_expired(&env.block))
-            .map(|a| cw721_upgradeable::Approval {
+            .map(|a| cw721_upgradable::Approval {
                 spender: a.spender.into_string(),
                 expires: a.expires,
             })
@@ -285,8 +285,8 @@ where
     }
 }
 
-fn parse_approval(item: StdResult<(Addr, Expiration)>) -> StdResult<cw721_upgradeable::Approval> {
-    item.map(|(spender, expires)| cw721_upgradeable::Approval {
+fn parse_approval(item: StdResult<(Addr, Expiration)>) -> StdResult<cw721_upgradable::Approval> {
+    item.map(|(spender, expires)| cw721_upgradable::Approval {
         spender: spender.to_string(),
         expires,
     })
@@ -296,7 +296,7 @@ fn humanize_approvals<T>(
     block: &BlockInfo,
     info: &TokenInfo<T>,
     include_expired: bool,
-) -> Vec<cw721_upgradeable::Approval> {
+) -> Vec<cw721_upgradable::Approval> {
     info.approvals
         .iter()
         .filter(|apr| include_expired || !apr.is_expired(block))
@@ -304,8 +304,8 @@ fn humanize_approvals<T>(
         .collect()
 }
 
-fn humanize_approval(approval: &Approval) -> cw721_upgradeable::Approval {
-    cw721_upgradeable::Approval {
+fn humanize_approval(approval: &Approval) -> cw721_upgradable::Approval {
+    cw721_upgradable::Approval {
         spender: approval.spender.to_string(),
         expires: approval.expires,
     }

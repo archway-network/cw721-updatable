@@ -2,7 +2,7 @@ use crate::{ExecuteMsg, QueryMsg};
 use cosmwasm_std::{
     to_binary, Addr, CosmosMsg, CustomMsg, QuerierWrapper, StdResult, WasmMsg, WasmQuery,
 };
-use cw721_upgradeable::{
+use cw721_upgradable::{
     AllNftInfoResponse, Approval, ApprovalResponse, ApprovalsResponse, ContractInfoResponse,
     NftInfoResponse, NumTokensResponse, OperatorsResponse, OwnerOfResponse, TokensResponse,
 };
