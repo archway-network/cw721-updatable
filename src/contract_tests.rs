@@ -227,7 +227,7 @@ fn updating_nft() {
     let mut deps = mock_dependencies();
     let contract = setup_extension_contract(deps.as_mut());
 
-    let token_id = "upgradeable".to_string();
+    let token_id1 = "upgradeable".to_string();
     let token_id2 = "can't be upgraded".to_string();
 
     let metadata_extension = Some(Metadata {
@@ -243,7 +243,7 @@ fn updating_nft() {
     });
 
     let mint_msg = ExecuteMsg::Mint(MintMsg::<MetadataExtension> {
-        token_id: token_id.clone(),
+        token_id: token_id1.clone(),
         owner: MINTER.to_string(),
         token_uri: None,
         extension: metadata_extension.clone(),
@@ -263,12 +263,12 @@ fn updating_nft() {
     });
 
     let update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
-        token_id: token_id.clone(),
+        token_id: token_id1.clone(),
         extension: modified_metadata_extension.clone(),
     });
 
     let err_update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
-        token_id: token_id.clone(),
+        token_id: token_id1.clone(),
         extension: err_metadata_extension.clone(),
     });
 
@@ -288,7 +288,7 @@ fn updating_nft() {
         .unwrap();
 
     // Original NFT infos are correct
-    let info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
+    let info = contract.nft_info(deps.as_ref(), token_id1.clone()).unwrap();
     assert_eq!(
         info,
         NftInfoResponse::<MetadataExtension> {
@@ -325,7 +325,7 @@ fn updating_nft() {
         .execute(deps.as_mut(), mock_env(), admin.clone(), update_msg)
         .unwrap();
 
-    let update_info = contract.nft_info(deps.as_ref(), token_id.clone()).unwrap();
+    let update_info = contract.nft_info(deps.as_ref(), token_id1.clone()).unwrap();
 
     // Modified NFT info is correct
     assert_eq!(
