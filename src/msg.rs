@@ -69,8 +69,7 @@ pub enum ExecuteMsg<T, E> {
     /// Extension msg
     Extension { msg: E },
 
-    /// Upgrade NFT metadata 
-    /// XXX TODO: Require correct approvals
+    /// Upgrade extension metadata
     Update(UpdateMsg<T>),
 }
 

@@ -122,7 +122,7 @@ where
             .add_attribute("token_id", msg.token_id))
     }
 
-    // Update extensions metadata
+    // Update extension metadata
     fn update(
         &self,
         deps: DepsMut,
@@ -147,8 +147,8 @@ where
         // Set extension metadata
         token.extension = metadata;
 
-        // Remove existing approvals
-        token.approvals = vec![];
+        // Remove existing approvals?
+        // token.approvals = vec![];
 
         self.tokens.save(deps.storage, &token_id, &token)?;
     
