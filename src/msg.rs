@@ -70,7 +70,7 @@ pub enum ExecuteMsg<T, E> {
     Extension { msg: E },
 
     /// Upgrade extension metadata
-    Update(UpdateMsg<T>),
+    Upgrade(UpgradeMsg<T>),
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -88,7 +88,7 @@ pub struct MintMsg<T> {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct UpdateMsg<T> {
+pub struct UpgradeMsg<T> {
     /// Unique ID of the NFT
     pub token_id: String,
     /// Any custom extension used by this contract

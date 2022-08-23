@@ -7,7 +7,7 @@ use cw2::set_contract_version;
 use cw721_upgradeable::{ContractInfoResponse, CustomMsg, Cw721Execute, Cw721ReceiveMsg, Expiration};
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpdateMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpgradeMsg};
 use crate::state::{Approval, Cw721Contract, TokenInfo};
 
 // Version info for migration
@@ -74,7 +74,7 @@ where
             ExecuteMsg::Extension { msg: _ } => Ok(Response::default()),
 
             // Update extensions metadata
-            ExecuteMsg::Update(msg) => self.update(deps, env, info, msg),
+            ExecuteMsg::Upgrade(msg) => self.upgrade(deps, env, info, msg),
         }
     }
 }
@@ -123,12 +123,12 @@ where
     }
 
     // Update extension metadata
-    fn update(
+    fn upgrade(
         &self,
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        msg: UpdateMsg<T>,
+        msg: UpgradeMsg<T>,
     ) -> Result<Response<C>, ContractError> {
         let token_id = msg.token_id;
         let metadata = msg.extension;
@@ -147,8 +147,8 @@ where
         // Set extension metadata
         token.extension = metadata;
 
-        // Reset approvals?
-        // token.approvals = vec![];
+        // Reset token approvals
+        token.approvals = vec![];
 
         self.tokens.save(deps.storage, &token_id, &token)?;
     

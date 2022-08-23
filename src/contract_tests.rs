@@ -11,7 +11,7 @@ use crate::{
     ContractError, Cw721Contract, ExecuteMsg, Extension, InstantiateMsg, MintMsg, QueryMsg,
 };
 
-use crate::msg::{UpdateMsg};
+use crate::msg::{UpgradeMsg};
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -262,17 +262,17 @@ fn updating_nft() {
         image: Some("rugged".into()),
     });
 
-    let update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+    let update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
         token_id: token_id1.clone(),
         extension: modified_metadata_extension.clone(),
     });
 
-    let err_update_msg = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+    let err_update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
         token_id: token_id1.clone(),
         extension: err_metadata_extension.clone(),
     });
 
-    let err_update_msg2 = ExecuteMsg::Update(UpdateMsg::<MetadataExtension> {
+    let err_update_msg2 = ExecuteMsg::Upgrade(UpgradeMsg::<MetadataExtension> {
         token_id: token_id2.clone(),
         extension: err_metadata_extension.clone(),
     });
