@@ -223,12 +223,12 @@ fn burning() {
 }
 
 #[test]
-fn updating_nft() {
+fn upgrading_nft() {
     let mut deps = mock_dependencies();
     let contract = setup_extension_contract(deps.as_mut());
 
     let token_id1 = "upgradeable".to_string();
-    let token_id2 = "can't be upgraded".to_string();
+    let token_id2 = "won't be upgraded".to_string();
 
     let metadata_extension = Some(Metadata {
         name: Some("original name".into()),
