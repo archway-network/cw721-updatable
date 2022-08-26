@@ -10,7 +10,7 @@ Implements:
 - [x] CW721 Base
 - [x] Metadata extension
 - [x] Enumerable extension
-- [x] Updateable metadata (XXX TODO: Fix permissions scheme)
+- [x] Updateable metadata
 
 ## Implementation
 
