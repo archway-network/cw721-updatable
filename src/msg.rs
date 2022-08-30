@@ -2,7 +2,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use cosmwasm_std::Binary;
-use cw721_upgradable::Expiration;
+use cw721_updatable::Expiration;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
@@ -69,8 +69,8 @@ pub enum ExecuteMsg<T, E> {
     /// Extension msg
     Extension { msg: E },
 
-    /// Upgrade extension metadata
-    Upgrade(UpgradeMsg<T>),
+    /// Update extension metadata
+    UpdateMetadata(UpdateMetadataMsg<T>),
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -88,7 +88,7 @@ pub struct MintMsg<T> {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct UpgradeMsg<T> {
+pub struct UpdateMetadataMsg<T> {
     /// Unique ID of the NFT
     pub token_id: String,
     /// Any custom extension used by this contract

@@ -36,8 +36,7 @@ pub enum Cw721ExecuteMsg {
     /// Burn an NFT the sender has access to
     Burn { token_id: String },
 
-    //here
-    // Upgrade NFT metadata 
+    // UpdateMetadata NFT metadata 
     // XXX TODO: Require correct approvals
-    // Update { token_id: String, metadata: Option<T> }
+    // UpdateMetadata { token_id: String, metadata: Option<T> }
 }

@@ -1,5 +1,5 @@
 [package]
-name = "cw721-upgradable"
+name = "cw721-updatable"
 version = "0.13.4"
 authors = [
     "Ethan Frey <ethanfrey@users.noreply.github.com>",

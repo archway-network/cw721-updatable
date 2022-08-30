@@ -2,7 +2,7 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
 use cosmwasm_std::{from_binary, to_binary, CosmosMsg, DepsMut, Empty, Response, WasmMsg};
 
-use cw721_upgradable::{
+use cw721_updatable::{
     Approval, ApprovalResponse, ContractInfoResponse, Cw721Query, Cw721ReceiveMsg, Expiration,
     NftInfoResponse, OperatorsResponse, OwnerOfResponse,
 };
@@ -11,7 +11,7 @@ use crate::{
     ContractError, Cw721Contract, ExecuteMsg, InstantiateMsg, MintMsg, QueryMsg,
 };
 
-use crate::msg::{UpgradeMsg};
+use crate::msg::{UpdateMetadataMsg};
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -210,12 +210,12 @@ fn burning() {
 }
 
 #[test]
-fn upgrading_nft() {
+fn updating_metadata() {
     let mut deps = mock_dependencies();
     let contract = setup_contract(deps.as_mut());
 
-    let token_id1 = "upgradeable".to_string();
-    let token_id2 = "won't be upgraded".to_string();
+    let token_id1 = "updatable".to_string();
+    let token_id2 = "won't be updated".to_string();
 
     let metadata_extension = Some(Metadata {
         name: Some("original name".into()),
@@ -249,17 +249,17 @@ fn upgrading_nft() {
         image: Some("rugged".into()),
     });
 
-    let update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
+    let update_msg = ExecuteMsg::UpdateMetadata(UpdateMetadataMsg::<Extension> {
         token_id: token_id1.clone(),
         extension: modified_metadata_extension.clone(),
     });
 
-    let err_update_msg = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
+    let err_update_msg = ExecuteMsg::UpdateMetadata(UpdateMetadataMsg::<Extension> {
         token_id: token_id1.clone(),
         extension: err_metadata_extension.clone(),
     });
 
-    let err_update_msg2 = ExecuteMsg::Upgrade(UpgradeMsg::<Extension> {
+    let err_update_msg2 = ExecuteMsg::UpdateMetadata(UpdateMetadataMsg::<Extension> {
         token_id: token_id2.clone(),
         extension: err_metadata_extension.clone(),
     });
@@ -701,7 +701,7 @@ fn approving_all_revoking_all() {
     assert_eq!(
         res,
         OperatorsResponse {
-            operators: vec![cw721_upgradable::Approval {
+            operators: vec![cw721_updatable::Approval {
                 spender: String::from("operator"),
                 expires: Expiration::Never {}
             }]
@@ -733,7 +733,7 @@ fn approving_all_revoking_all() {
     assert_eq!(
         res,
         OperatorsResponse {
-            operators: vec![cw721_upgradable::Approval {
+            operators: vec![cw721_updatable::Approval {
                 spender: String::from("buddy"),
                 expires: buddy_expires,
             }]
@@ -752,7 +752,7 @@ fn approving_all_revoking_all() {
     assert_eq!(
         res,
         OperatorsResponse {
-            operators: vec![cw721_upgradable::Approval {
+            operators: vec![cw721_updatable::Approval {
                 spender: String::from("operator"),
                 expires: Expiration::Never {}
             }]
@@ -780,7 +780,7 @@ fn approving_all_revoking_all() {
     assert_eq!(
         res,
         OperatorsResponse {
-            operators: vec![cw721_upgradable::Approval {
+            operators: vec![cw721_updatable::Approval {
                 spender: String::from("buddy"),
                 expires: buddy_expires,
             }]

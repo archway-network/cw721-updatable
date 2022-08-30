@@ -4,10 +4,10 @@ use serde::Serialize;
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 
 use cw2::set_contract_version;
-use cw721_upgradable::{ContractInfoResponse, CustomMsg, Cw721Execute, Cw721ReceiveMsg, Expiration};
+use cw721_updatable::{ContractInfoResponse, CustomMsg, Cw721Execute, Cw721ReceiveMsg, Expiration};
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpgradeMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpdateMetadataMsg};
 use crate::state::{Approval, Cw721Contract, TokenInfo};
 
 // Version info for migration
@@ -74,7 +74,7 @@ where
             ExecuteMsg::Extension { msg: _ } => Ok(Response::default()),
 
             // Update extensions metadata
-            ExecuteMsg::Upgrade(msg) => self.upgrade(deps, env, info, msg),
+            ExecuteMsg::UpdateMetadata(msg) => self.update_metadata(deps, env, info, msg),
         }
     }
 }
@@ -123,12 +123,12 @@ where
     }
 
     // Update extension metadata
-    fn upgrade(
+    fn update_metadata(
         &self,
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        msg: UpgradeMsg<T>,
+        msg: UpdateMetadataMsg<T>,
     ) -> Result<Response<C>, ContractError> {
         let token_id = msg.token_id;
         let metadata = msg.extension;
