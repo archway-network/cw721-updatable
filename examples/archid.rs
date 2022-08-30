@@ -11,6 +11,12 @@ pub struct Account {
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
+pub struct Website {
+  url: Option<String>,
+  domain: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct Metadata {
     pub name: Option<String>,         // e.g. for interoperability with external marketplaces
     pub description: Option<String>,  // e.g. ibid.
@@ -18,6 +24,7 @@ pub struct Metadata {
     pub domain: Option<String>,
     pub subdomains: Option<Vec<String>>,
     pub accounts: Option<Vec<Account>>,
+    pub websites: Option<Vec<Website>>,
     pub expiry: Option<Expiration>,
 }
 
@@ -42,6 +49,25 @@ fn example_metadata() {
     }
   ];
 
+  let websites = vec![
+    Website {
+      url: Some("drewstaylor.com".to_string()),
+      domain: Some("drewstaylor.arch".to_string()),
+    },
+    Website {
+      url: Some("game.drewstaylor.com".to_string()),
+      domain: Some("game.drewstaylor.arch".to_string()),
+    },
+    Website {
+      url: Some("dapp.drewstaylor.com".to_string()),
+      domain: Some("dapp.drewstaylor.arch".to_string()),
+    },
+    Website {
+      url: Some("market.drewstaylor.com".to_string()),
+      domain: Some("market.drewstaylor.arch".to_string()),
+    }
+  ];
+
   let metadata_extension = Some(Metadata {
       name: Some("drewstaylor.arch".into()),
       description: Some("default token description".into()),
@@ -49,6 +75,7 @@ fn example_metadata() {
       domain: Some("drewstaylor.arch".into()),
       subdomains: Some(subdomains),
       accounts: Some(accounts),
+      websites: Some(websites),
       expiry: Some(Expiration::AtHeight(1234567)),
   });
 
