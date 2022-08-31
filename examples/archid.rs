@@ -21,11 +21,11 @@ pub struct Metadata {
     pub name: Option<String>,         // e.g. for interoperability with external marketplaces
     pub description: Option<String>,  // e.g. ibid.
     pub image: Option<String>,        // e.g. ibid.
+    pub expiry: Option<Expiration>,
     pub domain: Option<String>,
     pub subdomains: Vec<String>,
     pub accounts: Vec<Account>,
     pub websites: Vec<Website>,
-    pub expiry: Option<Expiration>,
 }
 
 fn example_metadata() {
@@ -73,10 +73,10 @@ fn example_metadata() {
       description: Some("default token description".into()),
       image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
       domain: Some("drewstaylor.arch".into()),
+      expiry: Some(Expiration::AtHeight(1234567)),
       subdomains: subdomains,
       accounts: accounts,
       websites: websites,
-      expiry: Some(Expiration::AtHeight(1234567)),
   });
 
   dbg!(metadata_extension);
