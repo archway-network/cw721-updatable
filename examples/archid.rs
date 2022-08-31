@@ -22,9 +22,9 @@ pub struct Metadata {
     pub description: Option<String>,  // e.g. ibid.
     pub image: Option<String>,        // e.g. ibid.
     pub domain: Option<String>,
-    pub subdomains: Option<Vec<String>>,
-    pub accounts: Option<Vec<Account>>,
-    pub websites: Option<Vec<Website>>,
+    pub subdomains: Vec<String>,
+    pub accounts: Vec<Account>,
+    pub websites: Vec<Website>,
     pub expiry: Option<Expiration>,
 }
 
@@ -73,9 +73,9 @@ fn example_metadata() {
       description: Some("default token description".into()),
       image: Some("ipfs://QmZdPdZzZum2jQ7jg1ekfeE3LSz1avAaa42G6mfimw9TEn".into()),
       domain: Some("drewstaylor.arch".into()),
-      subdomains: Some(subdomains),
-      accounts: Some(accounts),
-      websites: Some(websites),
+      subdomains: subdomains,
+      accounts: accounts,
+      websites: websites,
       expiry: Some(Expiration::AtHeight(1234567)),
   });
 
