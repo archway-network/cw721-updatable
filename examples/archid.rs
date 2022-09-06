@@ -8,24 +8,26 @@ pub struct Account {
   username: Option<String>,
   profile: Option<String>,
   account_type: Option<String>,
+  verfication_hash: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct Website {
   url: Option<String>,
   domain: Option<String>,
+  verfication_hash: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct Metadata {
-    pub name: Option<String>,         // e.g. for interoperability with external marketplaces
-    pub description: Option<String>,  // e.g. ibid.
-    pub image: Option<String>,        // e.g. ibid.
-    pub expiry: Option<Expiration>,
-    pub domain: Option<String>,
-    pub subdomains: Vec<String>,
-    pub accounts: Vec<Account>,
-    pub websites: Vec<Website>,
+  pub name: Option<String>,         // e.g. for interoperability with external marketplaces
+  pub description: Option<String>,  // e.g. ibid.
+  pub image: Option<String>,        // e.g. ibid.
+  pub expiry: Option<Expiration>,
+  pub domain: Option<String>,
+  pub subdomains: Vec<String>,
+  pub accounts: Vec<Account>,
+  pub websites: Vec<Website>,
 }
 
 fn example_metadata() {
@@ -41,11 +43,13 @@ fn example_metadata() {
       username: Some("drew.taylor@chainofinsight.com".to_string()),
       profile: None,
       account_type: Some("email".to_string()),
+      verfication_hash: None, // XXX: Only "self attestations" for now
     },
     Account {
       username: Some("@chainofinsight".to_string()),
       profile: Some("twitter.com/chainofinsight".to_string()),
       account_type: Some("twitter".to_string()),
+      verfication_hash: None,
     }
   ];
 
@@ -53,18 +57,22 @@ fn example_metadata() {
     Website {
       url: Some("drewstaylor.com".to_string()),
       domain: Some("drewstaylor.arch".to_string()),
+      verfication_hash: None,
     },
     Website {
       url: Some("game.drewstaylor.com".to_string()),
       domain: Some("game.drewstaylor.arch".to_string()),
+      verfication_hash: None,
     },
     Website {
       url: Some("dapp.drewstaylor.com".to_string()),
       domain: Some("dapp.drewstaylor.arch".to_string()),
+      verfication_hash: None,
     },
     Website {
       url: Some("market.drewstaylor.com".to_string()),
       domain: Some("market.drewstaylor.arch".to_string()),
+      verfication_hash: None,
     }
   ];
 
