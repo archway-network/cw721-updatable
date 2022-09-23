@@ -11,7 +11,7 @@ use crate::msg::{ExecuteMsg, InstantiateMsg, MintMsg, UpdateMetadataMsg};
 use crate::state::{Approval, Cw721Contract, TokenInfo};
 
 // Version info for migration
-const CONTRACT_NAME: &str = "crates.io:cw721-base";
+const CONTRACT_NAME: &str = "crates.io:cw721-updatable";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
