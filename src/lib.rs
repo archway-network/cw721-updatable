@@ -38,7 +38,7 @@ pub mod entry {
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        msg: ExecuteMsg<Extension, Empty>,
+        msg: ExecuteMsg<Extension>,
     ) -> Result<Response, ContractError> {
         let tract = Cw721Contract::<Extension, Empty, Empty, Empty>::default();
         tract.execute(deps, env, info, msg)

@@ -6,7 +6,7 @@ use cw_utils::Expiration;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
-pub enum Cw721ExecuteMsg {
+pub enum Cw721ExecuteMsg<T> {
     /// Transfer is a base message to move a token to another account without triggering actions
     TransferNft { recipient: String, token_id: String },
     /// Send is a base message to transfer a token to a contract and trigger an action
@@ -36,7 +36,14 @@ pub enum Cw721ExecuteMsg {
     /// Burn an NFT the sender has access to
     Burn { token_id: String },
 
-    // UpdateMetadata NFT metadata 
-    // XXX TODO: Require correct approvals
-    // UpdateMetadata { token_id: String, metadata: Option<T> }
+    /// Update extension metadata
+    UpdateMetadata(UpdateMetadataMsg<T>),
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct UpdateMetadataMsg<T> {
+    /// Unique ID of the NFT
+    pub token_id: String,
+    /// Any custom extension used by this contract
+    pub extension: T,
 }

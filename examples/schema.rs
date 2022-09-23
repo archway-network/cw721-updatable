@@ -18,7 +18,7 @@ fn main() {
 
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
     export_schema_with_title(
-        &schema_for!(ExecuteMsg<Extension, Empty>),
+        &schema_for!(ExecuteMsg<Extension>),
         &out_dir,
         "ExecuteMsg",
     );

@@ -22,7 +22,7 @@ pub struct InstantiateMsg {
 /// use other control logic in any contract that inherits this.
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg<T, E> {
+pub enum ExecuteMsg<T> {
     /// Transfer is a base message to move a token to another account without triggering actions
     TransferNft { 
         recipient: String, 
@@ -65,9 +65,6 @@ pub enum ExecuteMsg<T, E> {
 
     /// Burn an NFT the sender has access to
     Burn { token_id: String },
-
-    /// Extension msg
-    Extension { msg: E },
 
     /// Update extension metadata
     UpdateMetadata(UpdateMetadataMsg<T>),
