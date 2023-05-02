@@ -204,6 +204,27 @@
       "additionalProperties": false
     },
     {
+      "description": "Extension msg",
+      "type": "object",
+      "required": [
+        "extension"
+      ],
+      "properties": {
+        "extension": {
+          "type": "object",
+          "required": [
+            "msg"
+          ],
+          "properties": {
+            "msg": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
       "description": "Update extension metadata",
       "type": "object",
       "required": [
