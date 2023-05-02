@@ -153,7 +153,7 @@ where
         self.tokens.save(deps.storage, &token_id, &token)?;
     
         Ok(Response::new()
-            .add_attribute("action", "upgrade")
+            .add_attribute("action", "update_metadata")
             .add_attribute("sender", info.sender)
             .add_attribute("token_id", token_id))
     }
