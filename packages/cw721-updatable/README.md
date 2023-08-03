@@ -51,6 +51,8 @@ tokens and applies to any future token that the owner receives as well.
 `RevokeAll{operator}` - Revoke a previous `ApproveAll` permission granted
 to the given `operator`.
 
+`UpdateMetadata{token_id, extension}` - Update metadata `extension` for a token by its `token_id`. While the message type is included, implementation is left to the developer.
+
 ### Queries
 
 `OwnerOf{token_id, include_expired}` - Returns the owner of the given token,
