@@ -1,8 +1,9 @@
 [package]
-name = "cw721-base"
-version = "0.13.4"
+name = "cw721-updatable"
+version = "1.0.0"
 edition = "2018"
-description = "Basic implementation cw721 NFTs"
+description = "Basic implementation cw721 NFTs with updatable metadata"
+repository = "https://github.com/archway-network/cw721-updatable"
 license = "Apache-2.0"
 
 exclude = [
