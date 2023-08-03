@@ -1,17 +1,15 @@
 [package]
 name = "cw721-updatable"
-version = "0.13.4"
+version = "1.0.0"
 authors = [
+    "Drew Taylor <drew.taylor@philabs.xyz>",
     "Ethan Frey <ethanfrey@users.noreply.github.com>",
     "Orkun Külçe <orkun@deuslabs.fi>",
-    "Drew Taylor <drew.taylor@philabs.xyz>",
 ]
 edition = "2018"
-description = "Definition and types for the CosmWasm-721 NFT interface"
+description = "Definition and types for the CosmWasm-721 NFT interface, with updatable metadata"
 license = "Apache-2.0"
-repository = "https://github.com/CosmWasm/cw-nfts"
-homepage = "https://cosmwasm.com"
-documentation = "https://docs.cosmwasm.com"
+repository = "https://github.com/archway-network/cw721-updatable"
 
 [dependencies]
 cw-utils = "0.13.4"

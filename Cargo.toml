@@ -1,5 +1,5 @@
 [package]
-name = "cw721-updatable"
+name = "cw721-base-updatable"
 version = "1.0.0"
 edition = "2018"
 description = "Basic implementation cw721 NFTs with updatable metadata"
@@ -8,8 +8,6 @@ license = "Apache-2.0"
 keywords = ["CosmWasm", "cw721", "cw721-base"]
 authors = [
   "Drew Taylor <drew.taylor@philabs.xyz>",
-  "Ethan Frey <ethanfrey@users.noreply.github.com>",
-  "Orkun Külçe <orkun@deuslabs.fi>"
 ]
 
 exclude = ["artifacts/*"]
