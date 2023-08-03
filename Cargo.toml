@@ -5,13 +5,15 @@ edition = "2018"
 description = "Basic implementation cw721 NFTs with updatable metadata"
 repository = "https://github.com/archway-network/cw721-updatable"
 license = "Apache-2.0"
-
-exclude = [
-  # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "artifacts/*",
+keywords = ["CosmWasm", "cw721", "cw721-base"]
+authors = [
+  "Drew Taylor <drew.taylor@philabs.xyz>",
+  "Ethan Frey <ethanfrey@users.noreply.github.com>",
+  "Orkun Külçe <orkun@deuslabs.fi>"
 ]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+exclude = ["artifacts/*"]
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 
