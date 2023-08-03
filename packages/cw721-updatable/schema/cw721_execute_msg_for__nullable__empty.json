@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Cw721ExecuteMsg_for_Empty",
+  "title": "Cw721ExecuteMsg_for_Nullable_Empty",
   "oneOf": [
     {
       "description": "Transfer is a base message to move a token to another account without triggering actions",
@@ -197,7 +197,7 @@
       ],
       "properties": {
         "update_metadata": {
-          "$ref": "#/definitions/UpdateMetadataMsg_for_Empty"
+          "$ref": "#/definitions/UpdateMetadataMsg_for_Nullable_Empty"
         }
       },
       "additionalProperties": false
@@ -270,18 +270,20 @@
       "description": "A thin wrapper around u64 that is using strings for JSON encoding/decoding, such that the full u64 range can be used for clients that convert JSON numbers to floats, like JavaScript and jq.\n\n# Examples\n\nUse `from` to create instances of this and `u64` to get the value out:\n\n``` # use cosmwasm_std::Uint64; let a = Uint64::from(42u64); assert_eq!(a.u64(), 42);\n\nlet b = Uint64::from(70u32); assert_eq!(b.u64(), 70); ```",
       "type": "string"
     },
-    "UpdateMetadataMsg_for_Empty": {
+    "UpdateMetadataMsg_for_Nullable_Empty": {
       "type": "object",
       "required": [
-        "extension",
         "token_id"
       ],
       "properties": {
         "extension": {
           "description": "Any custom extension used by this contract",
-          "allOf": [
+          "anyOf": [
             {
               "$ref": "#/definitions/Empty"
+            },
+            {
+              "type": "null"
             }
           ]
         },
