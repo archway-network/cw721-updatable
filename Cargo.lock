@@ -182,21 +182,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cw721-base"
-version = "0.13.4"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-storage-plus",
- "cw-utils",
- "cw2",
- "cw721-updatable",
- "schemars",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "cw721-updatable"
 version = "0.13.4"
 dependencies = [
@@ -204,6 +189,21 @@ dependencies = [
  "cw-utils",
  "schemars",
  "serde",
+]
+
+[[package]]
+name = "cw721-updatable"
+version = "1.0.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus",
+ "cw-utils",
+ "cw2",
+ "cw721-updatable 0.13.4",
+ "schemars",
+ "serde",
+ "thiserror",
 ]
 
 [[package]]
