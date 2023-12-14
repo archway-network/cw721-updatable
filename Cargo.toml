@@ -1,9 +1,10 @@
 [package]
 name = "cw721-base-updatable"
-version = "1.0.0"
+version = "1.0.4"
 edition = "2018"
 description = "Basic implementation cw721 NFTs with updatable metadata"
 repository = "https://github.com/archway-network/cw721-updatable"
+
 license = "Apache-2.0"
 keywords = ["CosmWasm", "cw721", "cw721-base"]
 authors = [

@@ -183,7 +183,7 @@ dependencies = [
 
 [[package]]
 name = "cw721-base-updatable"
-version = "1.0.0"
+version = "1.0.4"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -198,7 +198,7 @@ dependencies = [
 
 [[package]]
 name = "cw721-updatable"
-version = "1.0.0"
+version = "1.0.4"
 dependencies = [
  "cosmwasm-std",
  "cw-utils",
