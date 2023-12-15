@@ -1,6 +1,6 @@
 [package]
 name = "cw721-updatable"
-version = "1.0.4"
+version = "1.0.5"
 authors = [
     "Drew Taylor <drew.taylor@philabs.xyz>",
     "Ethan Frey <ethanfrey@users.noreply.github.com>",

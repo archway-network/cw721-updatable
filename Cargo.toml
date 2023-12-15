@@ -1,6 +1,6 @@
 [package]
 name = "cw721-base-updatable"
-version = "1.0.4"
+version = "1.0.5"
 edition = "2018"
 description = "Basic implementation cw721 NFTs with updatable metadata"
 repository = "https://github.com/archway-network/cw721-updatable"
